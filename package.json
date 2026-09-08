@@ -1,0 +1,22 @@
+{
+  "name": "friday-night-drivebook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply friday-night-drivebook --local",
+    "db:migrate:remote": "wrangler d1 migrations apply friday-night-drivebook --remote",
+    "types": "wrangler types",
+    "typecheck": "wrangler types && tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm test && wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "@types/node": "24.3.1",
+    "typescript": "5.9.2",
+    "vitest": "4.1.10",
+    "wrangler": "4.129.1"
+  }
+}

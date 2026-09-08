@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07110d" />
+    <meta name="description" content="A live, D1-powered high school football game journal." />
+    <title>Friday Night Drivebook</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <div class="stadium-glow" aria-hidden="true"></div>
+    <header class="shell topbar">
+      <a class="brand" href="/" aria-label="Friday Night Drivebook home">
+        <span class="brand-mark">FN</span>
+        <span><strong>Friday Night</strong><small>Drivebook</small></span>
+      </a>
+      <button class="secondary compact" id="new-game-button" type="button">+ New game</button>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">LIVE FROM THE BLEACHERS</p>
+        <h1>Remember every drive.<br /><span>See the whole game.</span></h1>
+        <p>Capture the score, momentum, and details worth revisiting—before the stadium lights go dark.</p>
+      </section>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <section class="workspace" id="workspace" hidden>
+        <aside class="game-rail">
+          <div class="section-heading"><span>Games</span><span id="game-count">0</span></div>
+          <div id="game-list" class="game-list"></div>
+        </aside>
+
+        <div class="game-main">
+          <section class="scoreboard card" aria-labelledby="matchup-heading">
+            <div class="score-meta"><span id="game-status" class="live-pill">LIVE</span><span id="game-venue"></span></div>
+            <div class="matchup">
+              <div class="team"><span id="away-team">Away</span><strong id="away-score">0</strong></div>
+              <div class="game-clock"><span id="game-quarter">GAME</span><span>—</span></div>
+              <div class="team team-home"><strong id="home-score">0</strong><span id="home-team">Home</span></div>
+            </div>
+            <h2 class="sr-only" id="matchup-heading">Current game</h2>
+            <form id="score-form" class="score-controls">
+              <label><span>Away</span><input id="away-score-input" type="number" min="0" max="199" inputmode="numeric" required /></label>
+              <label><span>Home</span><input id="home-score-input" type="number" min="0" max="199" inputmode="numeric" required /></label>
+              <label><span>Status</span><select id="status-input"><option value="scheduled">Scheduled</option><option value="live">Live</option><option value="final">Final</option></select></label>
+              <button class="secondary" type="submit">Update score</button>
+            </form>
+          </section>
+
+          <section class="composer card">
+            <div class="section-heading"><span>Log a drive</span><span>Quick entry</span></div>
+            <form id="drive-form">
+              <div class="field-row four">
+                <label>Quarter<select id="quarter" required><option value="1">Q1</option><option value="2">Q2</option><option value="3">Q3</option><option value="4">Q4</option><option value="5">OT</option></select></label>
+                <label>Clock<input id="clock" required pattern="(?:[0-9]|1[0-5]):[0-5][0-9]" placeholder="8:42" /></label>
+                <label>Yards<input id="yards" required type="number" min="-99" max="99" value="0" inputmode="numeric" /></label>
+                <label>Result<select id="result" required><option>Touchdown</option><option>Field goal</option><option>Punt</option><option>Turnover</option><option>Turnover on downs</option><option>End of half</option></select></label>
+              </div>
+              <label>Possession<select id="possession" required></select></label>
+              <label>What happened?<textarea id="summary" maxlength="280" required placeholder="Nine plays, 68 yards. The sweep finally broke outside…"></textarea></label>
+              <div class="form-footer"><span>Saved to Cloudflare D1</span><button class="primary" type="submit">Add to timeline</button></div>
+            </form>
+          </section>
+
+          <section class="timeline-section">
+            <div class="section-heading"><span>Drive timeline</span><span id="drive-count">0 drives</span></div>
+            <div id="drive-list" class="timeline"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="new-game-dialog">
+      <form id="new-game-form" class="dialog-card">
+        <div class="dialog-head"><div><p class="eyebrow">NEW MATCHUP</p><h2>Start a drivebook</h2></div><button id="close-dialog" class="icon-button" type="button" aria-label="Close">×</button></div>
+        <div class="field-row two"><label>Away team<input id="new-away" maxlength="60" required placeholder="Riverton Tigers" /></label><label>Home team<input id="new-home" maxlength="60" required placeholder="Northside Hawks" /></label></div>
+        <label>Venue<input id="new-venue" maxlength="100" required placeholder="Memorial Field" /></label>
+        <label>Kickoff<input id="new-date" type="datetime-local" required /></label>
+        <button class="primary full" type="submit">Create live game</button>
+      </form>
+    </dialog>
+
+    <template id="drive-template">
+      <article class="drive card">
+        <div class="drive-marker"><strong class="drive-sequence"></strong><span></span></div>
+        <div class="drive-body">
+          <div class="drive-top"><div><span class="drive-possession"></span><span class="drive-time"></span></div><span class="result-pill"></span></div>
+          <p class="drive-summary"></p>
+          <div class="drive-stats"><span class="drive-yards"></span></div>
+          <div class="notes"></div>
+          <form class="note-form"><label class="sr-only">Add a note</label><input maxlength="500" required placeholder="Add a sideline note…" /><button type="submit">Save note</button></form>
+        </div>
+      </article>
+    </template>
+  </body>
+</html>
+
